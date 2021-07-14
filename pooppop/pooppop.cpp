@@ -2,9 +2,28 @@
 //
 
 #include <iostream>
+#include "Model/Pair.h"
+#include "Model/Piece.h"
+#include "Controller/GridController.h"
+#include "TerminalView/GridView.h"
 
 int main()
 {
+    namespace model = ::pooppop::model;
+    model::Piece a(0), b(1);
+    model::Pair empty(), ab(&a, &b), abup(&a, &b, model::Pair::Orientation::VERTICAL);
+
+    namespace controller = ::pooppop::controller;
+    namespace view = ::pooppop::terminalview;
+
+    controller::GridController gridController(8, 16);
+    while (gridController.AddPair(&abup, 8)) {
+
+    }
+
+    view::GridView gridView(&gridController);
+    gridView.DisplayView();
+
     std::cout << "Hello World!\n";
 }
 
