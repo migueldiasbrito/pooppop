@@ -146,6 +146,8 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Controller\GridController.cpp" />
+    <ClCompile Include="Fsm\State.cpp" />
+    <ClCompile Include="Fsm\StateMachine.cpp" />
     <ClCompile Include="Model/Pair.cpp" />
     <ClCompile Include="Model\Grid.cpp" />
     <ClCompile Include="pooppop.cpp" />
@@ -153,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller\GridController.h" />
+    <ClInclude Include="Fsm\State.h" />
+    <ClInclude Include="Fsm\StateMachine.h" />
     <ClInclude Include="Model/Pair.h" />
     <ClInclude Include="Model/Piece.h" />
     <ClInclude Include="Model\Grid.h" />

@@ -6,23 +6,64 @@
 #include "Model/Piece.h"
 #include "Controller/GridController.h"
 #include "TerminalView/GridView.h"
+#include "Fsm/StateMachine.h"
+
+namespace model = ::pooppop::model;
+namespace controller = ::pooppop::controller;
+namespace view = ::pooppop::terminalview;
+controller::GridController* gridController = nullptr;
+view::GridView* gridView = nullptr;
+
+void onLoad() {
+    gridController = new controller::GridController(8, 16);
+    gridView = new view::GridView(gridController);
+}
+
+void onDraw() {
+    gridView->DisplayView();
+}
+
+void onPlay() {
+    model::Piece a(0), b(1);
+    model::Pair abup(&a, &b, model::Pair::Orientation::VERTICAL);
+
+    while (gridController->AddPair(&abup, 8)) {
+
+    }
+}
 
 int main()
 {
-    namespace model = ::pooppop::model;
-    model::Piece a(0), b(1);
-    model::Pair empty(), ab(&a, &b), abup(&a, &b, model::Pair::Orientation::VERTICAL);
+    namespace fsm = ::pooppop::fsm;
+    fsm::StateMachine stateMachine;
 
-    namespace controller = ::pooppop::controller;
-    namespace view = ::pooppop::terminalview;
+    stateMachine.AddState("loading");
+    stateMachine.AddState("draw");
+    stateMachine.AddState("play");
 
-    controller::GridController gridController(8, 16);
-    while (gridController.AddPair(&abup, 8)) {
+    stateMachine.AddTransition("load", { "none" }, "loading");
+    stateMachine.AddTransition("drawGrid", { "loading", "play" }, "draw");
+    stateMachine.AddTransition("startPlay", { "draw" }, "play");
 
+    fsm::State* state = stateMachine.GetState("loading");
+    if (state != nullptr) {
+        state->RegisterOnEnterCallback(onLoad);
     }
 
-    view::GridView gridView(&gridController);
-    gridView.DisplayView();
+    state = stateMachine.GetState("draw");
+    if (state != nullptr) {
+        state->RegisterOnEnterCallback(onDraw);
+    }
+
+    state = stateMachine.GetState("play");
+    if (state != nullptr) {
+        state->RegisterOnEnterCallback(onPlay);
+    }
+
+    stateMachine.TriggerTransition("load");
+    stateMachine.TriggerTransition("drawGrid");
+    stateMachine.TriggerTransition("startPlay");
+    stateMachine.TriggerTransition("drawGrid");
 
     std::cout << "Hello World!\n";
 }
