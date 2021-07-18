@@ -37,3 +37,15 @@ void fsm::StateMachine::TriggerTransition(std::string transition) {
 	currentState = t.to;
 	state->Enter();
 }
+
+
+void fsm::StateMachine::QueueTransition(std::string transition) {
+	transitionsQueue.push(transition);
+}
+
+void fsm::StateMachine::Update() {
+	if (!transitionsQueue.empty()) {
+		TriggerTransition(transitionsQueue.front());
+		transitionsQueue.pop();
+	}
+}

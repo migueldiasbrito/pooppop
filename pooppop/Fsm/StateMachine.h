@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include "State.h"
+#include <queue>
 
 namespace pooppop {
 	namespace fsm {
@@ -16,6 +17,8 @@ namespace pooppop {
 			void AddTransition(std::string, std::vector<std::string>, std::string);
 			State* GetState(std::string);
 			void TriggerTransition(std::string);
+			void QueueTransition(std::string);
+			void Update();
 
 		private:
 			struct Transition
@@ -27,6 +30,7 @@ namespace pooppop {
 			std::map<std::string, State> states;
 			std::map<std::string, Transition> transitions;
 			std::string currentState;
+			std::queue<std::string> transitionsQueue;
 		};
 	}
 }
