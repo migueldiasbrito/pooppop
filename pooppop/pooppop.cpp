@@ -18,32 +18,40 @@ namespace fsm = ::pooppop::fsm;
 fsm::StateMachine stateMachine;
 
 void onLoad() {
-    gridController = new controller::GridController(8, 16);
+    gridController = new controller::GridController(16, 8);
     gridView = new view::GridView(gridController);
 }
 
 void onDraw() {
+    system("cls");
     gridView->DisplayView();
-    //std::cin.ignore();
+    std::cin.ignore();
 }
 
-void onPlay() {
+void onWaitPlay() {
     model::Piece *a = new model::Piece(rand() % 4), *b = new model::Piece(rand() % 4);
     model::Pair abup(a, b, model::Pair::Orientation(rand() % 2));
 
     stateMachine.QueueTransition("drawGrid");
 
-    if (gridController->AddPair(&abup, rand() % 8)) {
-        stateMachine.QueueTransition("startPlay");
+    if (gridController->AddPair(&abup, rand() % 7)) {
+        stateMachine.QueueTransition("processPlay");
     }
     else {
         stateMachine.QueueTransition("gameOver");
     }
 }
 
+void onProcessingPlay() {
+    gridController->DetectShapes();
+    stateMachine.QueueTransition("drawGrid");
+    stateMachine.QueueTransition("play");
+}
+
 bool gameOver = false;
 void onEnd() {
-    gridController->DetectShapes();
+    
+    gridView->DisplayView();
     gameOver = true;
 }
 
@@ -53,12 +61,14 @@ int main()
 
     stateMachine.AddState("loading");
     stateMachine.AddState("draw");
-    stateMachine.AddState("play");
+    stateMachine.AddState("waitPlay");
+    stateMachine.AddState("processingPlay");
     stateMachine.AddState("end");
 
     stateMachine.AddTransition("load", { "none" }, "loading");
-    stateMachine.AddTransition("drawGrid", { "loading", "play" }, "draw");
-    stateMachine.AddTransition("startPlay", { "draw" }, "play");
+    stateMachine.AddTransition("drawGrid", { "loading", "waitPlay", "processingPlay" }, "draw");
+    stateMachine.AddTransition("play", { "draw" }, "waitPlay");
+    stateMachine.AddTransition("processPlay", { "draw" }, "processingPlay");
     stateMachine.AddTransition("gameOver", { "draw" }, "end");
 
     fsm::State* state = stateMachine.GetState("loading");
@@ -71,9 +81,14 @@ int main()
         state->RegisterOnEnterCallback(onDraw);
     }
 
-    state = stateMachine.GetState("play");
+    state = stateMachine.GetState("waitPlay");
     if (state != nullptr) {
-        state->RegisterOnEnterCallback(onPlay);
+        state->RegisterOnEnterCallback(onWaitPlay);
+    }
+
+    state = stateMachine.GetState("processingPlay");
+    if (state != nullptr) {
+        state->RegisterOnEnterCallback(onProcessingPlay);
     }
 
     state = stateMachine.GetState("end");
@@ -83,7 +98,7 @@ int main()
 
     stateMachine.QueueTransition("load");
     stateMachine.QueueTransition("drawGrid");
-    stateMachine.QueueTransition("startPlay");
+    stateMachine.QueueTransition("play");
 
     while (!gameOver) {
         stateMachine.Update();

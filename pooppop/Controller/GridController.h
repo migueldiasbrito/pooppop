@@ -28,6 +28,12 @@ namespace pooppop {
 			int LastEmptyRow(int);
 			Shape getShape(int, int);
 			void AddUniqueIfSameColor(int, int, int, std::list<std::pair<int, int>>*);
+			void DeleteShapes(std::vector<Shape>*);
+			void DeletePieceAndUpdateColumn(int, int);
+			void UpdateRemainingShapesPieces(std::vector<Shape>*, int, std::list<std::pair<int, int>>::iterator);
+			void AddUncheckedPiece(int, int);
+			void RemoveUncheckedPiece(int, int);
+			void AddUpdateUncheckedPiece(int, int, int, int);
 		};
 	}
 }

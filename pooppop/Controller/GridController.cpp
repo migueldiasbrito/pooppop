@@ -19,25 +19,20 @@ bool controller::GridController::AddPair(model::Pair* pair, int column) {
 
 void controller::GridController::DetectShapes() {
 	std::vector<Shape> shapes;
-	std::list<std::pair<int, int>>::iterator it = uncheckedPieces.begin();
-	for (; it != uncheckedPieces.end(); it++) {
-		Shape shape = getShape(it->first, it->second);
-		if (shape.pieces.size() > 3) {
-			shapes.push_back(shape);
-		}
-	}
 
-	std::cout << "Shapes" << std::endl;
-	for (unsigned int i = 0; i < shapes.size(); i++) {
-		std::cout << i;
-		it = shapes[i].pieces.begin();
-		for (; it != shapes[i].pieces.end(); it++) {
-			std::cout << "(" << it->first << "," << it->second << ") ";
+	while (uncheckedPieces.size() > 0) {
+		shapes.clear();
+		std::list<std::pair<int, int>>::iterator it = uncheckedPieces.begin();
+		for (; it != uncheckedPieces.end(); it++) {
+			Shape shape = getShape(it->first, it->second);
+			if (shape.pieces.size() > 3) {
+				shapes.push_back(shape);
+			}
 		}
-		std::cout << std::endl << std::endl;
-	}
+		uncheckedPieces.clear();
 
-	uncheckedPieces.clear();
+		DeleteShapes(&shapes);
+	}
 }
 
 bool controller::GridController::DropPiece(model::Piece* piece, int column) {
@@ -47,7 +42,7 @@ bool controller::GridController::DropPiece(model::Piece* piece, int column) {
 
 	grid.SetPieceAt(piece, row, column);
 
-	uncheckedPieces.push_back(std::pair<int, int>(row, column));
+	AddUncheckedPiece(row, column);
 
 	return true;
 }
@@ -63,7 +58,7 @@ int controller::GridController::LastEmptyRow(int column) {
 		}
 	}
 
-	return grid.GetColumns();
+	return grid.GetRows();
 }
 
 controller::GridController::Shape controller::GridController::getShape(int row, int column) {
@@ -95,9 +90,78 @@ void controller::GridController::AddUniqueIfSameColor(int row, int column, int c
 	if (std::find(vector->begin(), vector->end(), pair) == vector->end()) {
 		vector->push_back(pair);
 
-		std::list<std::pair<int, int>>::iterator it = std::find(uncheckedPieces.begin(), uncheckedPieces.end(), pair);
-		if (it != uncheckedPieces.end()) {
-			uncheckedPieces.erase(it);
+		RemoveUncheckedPiece(row, column);
+	}
+}
+
+void controller::GridController::DeleteShapes(std::vector<Shape> *shapes) {
+	for (int i = 0; i < shapes->size(); i++) {
+		std::list<std::pair<int, int>>::iterator it = shapes->at(i).pieces.begin();
+		for (; it != shapes->at(i).pieces.end(); it++) {
+			int row = it->first;
+			int column = it->second;
+
+			DeletePieceAndUpdateColumn(row, column);
+			UpdateRemainingShapesPieces(shapes, i, it);
 		}
+	}
+}
+
+void controller::GridController::DeletePieceAndUpdateColumn(int row, int column) {
+	model::Piece* piece = grid.GetPieceAt(row, column);
+
+	if (piece == nullptr) { return; }
+
+	grid.DeletePiece(row, column);
+	RemoveUncheckedPiece(row, column);
+
+	for (row++; row < grid.GetRows(); row++) {
+		if (grid.GetPieceAt(row, column) == nullptr) { break; }
+
+		grid.ExchangePieces(row - 1, column, row, column);
+
+		AddUpdateUncheckedPiece(row, column, row - 1, column);
+	}
+}
+
+void controller::GridController::UpdateRemainingShapesPieces(std::vector<Shape>* shapes, int currentShape, std::list<std::pair<int, int>>::iterator currentPiece) {
+	int row = currentPiece->first;
+	int column = currentPiece->second;
+
+	for (int i = currentShape; i < shapes->size(); i++) {
+		std::list<std::pair<int, int>>::iterator it = (i == currentShape) ? std::next(currentPiece, 1) : shapes->at(i).pieces.begin();
+		for (; it != shapes->at(i).pieces.end(); it++) {
+			if (it->second != column || it->first <= row) { continue; }
+
+			it->first--;
+		}
+	}
+}
+
+void controller::GridController::AddUncheckedPiece(int row, int column) {
+	std::pair<int, int> pair(row, column);
+	std::list<std::pair<int, int>>::iterator it = std::find(uncheckedPieces.begin(), uncheckedPieces.end(), pair);
+	if (it == uncheckedPieces.end()) {
+		uncheckedPieces.push_back(std::pair<int, int>(row, column));
+	}
+}
+
+void controller::GridController::AddUpdateUncheckedPiece(int row, int column, int newRow, int newColumn) {
+	std::pair<int, int> pair(row, column);
+	std::list<std::pair<int, int>>::iterator it = std::find(uncheckedPieces.begin(), uncheckedPieces.end(), pair);
+	if (it != uncheckedPieces.end()) {
+		it->first = newRow;
+		it->second = newColumn;
+	}
+	else {
+		uncheckedPieces.push_back(std::pair<int, int>(newRow, newColumn));
+	}
+}
+
+void controller::GridController::RemoveUncheckedPiece(int row, int column) {
+	std::pair<int, int> pair(row, column);
+	std::list<std::pair<int, int>>::iterator it = std::find(uncheckedPieces.begin(), uncheckedPieces.end(), pair);
+	if (it != uncheckedPieces.end()) {
+		uncheckedPieces.erase(it);
 	}
 }

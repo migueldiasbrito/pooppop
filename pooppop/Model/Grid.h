@@ -15,6 +15,8 @@ namespace pooppop {
 			inline int GetColumns() { return columns; }
 			Piece* GetPieceAt(int, int);
 			bool SetPieceAt(Piece*, int, int);
+			void DeletePiece(int, int);
+			void ExchangePieces(int, int, int, int);
 		private:
 			std::vector<std::vector<Piece*>> grid;
 			int rows;
