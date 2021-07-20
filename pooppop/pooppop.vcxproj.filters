@@ -51,14 +51,17 @@
     <ClCompile Include="Controller\GridController.cpp">
       <Filter>Source Files\Controller</Filter>
     </ClCompile>
-    <ClCompile Include="TerminalView\GridView.cpp">
-      <Filter>Source Files\Controller</Filter>
-    </ClCompile>
     <ClCompile Include="Fsm\State.cpp">
       <Filter>Source Files\Fsm</Filter>
     </ClCompile>
     <ClCompile Include="Fsm\StateMachine.cpp">
       <Filter>Source Files\Fsm</Filter>
+    </ClCompile>
+    <ClCompile Include="TerminalView\TerminalGameManager.cpp">
+      <Filter>Source Files\TerminalView</Filter>
+    </ClCompile>
+    <ClCompile Include="TerminalView\GridView.cpp">
+      <Filter>Source Files\TerminalView</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -82,6 +85,9 @@
     </ClInclude>
     <ClInclude Include="Fsm\StateMachine.h">
       <Filter>Header Files\Fsm</Filter>
+    </ClInclude>
+    <ClInclude Include="TerminalView\TerminalGameManager.h">
+      <Filter>Header Files\TerminalView</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

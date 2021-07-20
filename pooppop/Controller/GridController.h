@@ -15,6 +15,7 @@ namespace pooppop {
 			bool AddPair(model::Pair*, int);
 			inline model::Grid* GetGrid() { return &grid; }
 			void DetectShapes();
+			void StartNewPlay();
 		private:
 			struct Shape
 			{

@@ -152,6 +152,7 @@
     <ClCompile Include="Model\Grid.cpp" />
     <ClCompile Include="pooppop.cpp" />
     <ClCompile Include="TerminalView\GridView.cpp" />
+    <ClCompile Include="TerminalView\TerminalGameManager.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Controller\GridController.h" />
@@ -161,6 +162,7 @@
     <ClInclude Include="Model/Piece.h" />
     <ClInclude Include="Model\Grid.h" />
     <ClInclude Include="TerminalView\GridView.h" />
+    <ClInclude Include="TerminalView\TerminalGameManager.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

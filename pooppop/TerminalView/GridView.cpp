@@ -1,13 +1,28 @@
 #include "GridView.h"
+#include "TerminalGameManager.h"
 #include <iostream>
 
 namespace view = ::pooppop::terminalview;
 
 view::GridView::GridView(controller::GridController* gridController) {
 	this->gridController = gridController;
+
+	fsm::StateMachine* stateMachine = terminalview::TerminalGameManager::GetInstance()->GetStateMachine();
+
+	fsm::State* state = stateMachine->GetState("draw");
+	if (state != nullptr) {
+		state->RegisterOnEnterCallback([this]() -> void {this->DisplayView(); });
+	}
+
+	state = stateMachine->GetState("end");
+	if (state != nullptr) {
+		state->RegisterOnEnterCallback([this]() -> void {this->DisplayView(); });
+	}
 }
 
 void view::GridView::DisplayView() {
+	system("cls");
+
 	model::Grid* grid = gridController->GetGrid();
 	std::cout << std::endl << "GRID" << std::endl << std::endl;
 
@@ -23,4 +38,6 @@ void view::GridView::DisplayView() {
 		}
 		std::cout << std::endl;
 	}
+
+	std::cin.ignore();
 }

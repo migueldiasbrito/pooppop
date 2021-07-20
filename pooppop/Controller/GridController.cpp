@@ -1,10 +1,28 @@
 #include "GridController.h"
+#include "../Fsm/StateMachine.h"
+#include "../TerminalView/TerminalGameManager.h"
 #include <iostream>
 
 namespace controller = ::pooppop::controller;
+namespace fsm = ::pooppop::fsm;
+namespace view = ::pooppop::terminalview;
 
 controller::GridController::GridController(int rows, int columns) : grid(rows, columns) {
+	fsm::StateMachine* stateMachine = terminalview::TerminalGameManager::GetInstance()->GetStateMachine();
 
+	fsm::State* state = stateMachine->GetState("waitPlay");
+	if (state != nullptr) {
+		state->RegisterOnEnterCallback([this]() -> void {this->StartNewPlay(); });
+	}
+
+	state = stateMachine->GetState("processingPlay");
+	if (state != nullptr) {
+		state->RegisterOnEnterCallback([this, stateMachine]() -> void {
+			this->DetectShapes();
+			stateMachine->QueueTransition("drawGrid");
+			stateMachine->QueueTransition("play");
+		});
+	}
 }
 
 bool controller::GridController::AddPair(model::Pair* pair, int column) {
@@ -32,6 +50,22 @@ void controller::GridController::DetectShapes() {
 		uncheckedPieces.clear();
 
 		DeleteShapes(&shapes);
+	}
+}
+
+void controller::GridController::StartNewPlay() {
+	model::Piece* a = new model::Piece(rand() % 4), * b = new model::Piece(rand() % 4);
+	model::Pair abup(a, b, model::Pair::Orientation(rand() % 2));
+
+	fsm::StateMachine* stateMachine = terminalview::TerminalGameManager::GetInstance()->GetStateMachine();
+
+	stateMachine->QueueTransition("drawGrid");
+
+	if (AddPair(&abup, rand() % 7)) {
+		stateMachine->QueueTransition("processPlay");
+	}
+	else {
+		stateMachine->QueueTransition("gameOver");
 	}
 }
 
