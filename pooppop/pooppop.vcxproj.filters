@@ -37,6 +37,24 @@
     <Filter Include="Source Files\Fsm">
       <UniqueIdentifier>{cee8d5ba-6252-4a0f-a453-2c4c91227a03}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\SDLView">
+      <UniqueIdentifier>{132e921c-2b52-4e5a-a007-493b429fb95c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SDLView">
+      <UniqueIdentifier>{eff98f23-4e4b-4e60-8096-be4fd8b4d4c2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\Game">
+      <UniqueIdentifier>{ec720df7-e03c-4b10-9f17-4c56cb5b768e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Game">
+      <UniqueIdentifier>{ad49a2e8-b4a0-4d5d-b2a2-853f3350737f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\SDLGameEngine">
+      <UniqueIdentifier>{2d9b924d-c40e-460f-9744-6ddce8386cdb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\SDLGameEngine">
+      <UniqueIdentifier>{cad51389-eee7-497c-942e-81acbb57d923}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="pooppop.cpp">
@@ -63,6 +81,30 @@
     <ClCompile Include="TerminalView\GridView.cpp">
       <Filter>Source Files\TerminalView</Filter>
     </ClCompile>
+    <ClCompile Include="SDLView\SDLGameManager.cpp">
+      <Filter>Source Files\SDLView</Filter>
+    </ClCompile>
+    <ClCompile Include="Game\IGameManager.cpp">
+      <Filter>Source Files\Game</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLView\SDLGridView.cpp">
+      <Filter>Source Files\SDLView</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGameEngine\GameObject.cpp">
+      <Filter>Source Files\SDLGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGameEngine\Texture.cpp">
+      <Filter>Source Files\SDLGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGameEngine\Scene.cpp">
+      <Filter>Source Files\SDLGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGameEngine\Renderer.cpp">
+      <Filter>Source Files\SDLGameEngine</Filter>
+    </ClCompile>
+    <ClCompile Include="SDLGameEngine\ImageCache.cpp">
+      <Filter>Source Files\SDLGameEngine</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Model/Pair.h">
@@ -88,6 +130,30 @@
     </ClInclude>
     <ClInclude Include="TerminalView\TerminalGameManager.h">
       <Filter>Header Files\TerminalView</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLView\SDLGameManager.h">
+      <Filter>Header Files\SDLView</Filter>
+    </ClInclude>
+    <ClInclude Include="Game\IGameManager.h">
+      <Filter>Header Files\Game</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLView\SDLGridView.h">
+      <Filter>Header Files\SDLView</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGameEngine\GameObject.h">
+      <Filter>Header Files\SDLGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGameEngine\Texture.h">
+      <Filter>Header Files\SDLGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGameEngine\Scene.h">
+      <Filter>Header Files\SDLGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGameEngine\Renderer.h">
+      <Filter>Header Files\SDLGameEngine</Filter>
+    </ClInclude>
+    <ClInclude Include="SDLGameEngine\ImageCache.h">
+      <Filter>Header Files\SDLGameEngine</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

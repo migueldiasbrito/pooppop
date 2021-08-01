@@ -1,21 +1,23 @@
-#ifndef POOPPOP_TERMINALVIEW_TERMINALGAMEMANAGER_H_
-#define POOPPOP_TERMINALVIEW_TERMINALGAMEMANAGER_H_
+#ifndef POOPPOP_SDLVIEW_SDLGAMEMANAGER_H_
+#define POOPPOP_SDLVIEW_SDLGAMEMANAGER_H_
 
 #include "../Game/IGameManager.h"
 #include "../Fsm/StateMachine.h"
 #include "../Controller/GridController.h"
-#include "GridView.h"
+#include "SDLGridView.h"
+#include <SDL.h>
 
 namespace game = ::pooppop::game;
 namespace fsm = ::pooppop::fsm;
 namespace controller = ::pooppop::controller;
 
 namespace pooppop {
-	namespace terminalview {
-		class TerminalGameManager : public game::IGameManager
+	namespace sdlview {
+		class SDLGameManager : public game::IGameManager
 		{
 		public:
-			TerminalGameManager();
+			SDLGameManager();
+			~SDLGameManager();
 			int Play();
 			void OnLoad();
 			void OnEnd();
@@ -24,10 +26,10 @@ namespace pooppop {
 		private:
 			fsm::StateMachine stateMachine;
 			controller::GridController* gridController = nullptr;
-			GridView* gridView = nullptr;
 			bool gameOver = false;
+			SDLGridView* gridView = nullptr;
 		};
 	}
 }
 
-#endif  // POOPPOP_TERMINALVIEW_TERMINALGAMEMANAGER_H_
+#endif  // POOPPOP_SDLVIEW_SDLGAMEMANAGER_H_

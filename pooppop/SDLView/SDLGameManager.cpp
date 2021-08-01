@@ -1,8 +1,10 @@
-#include "TerminalGameManager.h"
+#include "SDLGameManager.h"
+#include "../SDLGameEngine/Renderer.h"
 
-namespace view = ::pooppop::terminalview;
+namespace view = ::pooppop::sdlview;
+namespace engine = ::pooppop::sdl_game_engine;
 
-view::TerminalGameManager::TerminalGameManager() {
+view::SDLGameManager::SDLGameManager() {
 	SetInstance(this);
 
 	stateMachine.AddState("loading");
@@ -32,7 +34,12 @@ view::TerminalGameManager::TerminalGameManager() {
 	stateMachine.QueueTransition("play");
 }
 
-int view::TerminalGameManager::Play() {
+view::SDLGameManager::~SDLGameManager () {
+	delete gridController;
+	delete gridView;
+}
+
+int view::SDLGameManager::Play() {
 	while (!gameOver) {
 		stateMachine.Update();
 	}
@@ -40,11 +47,22 @@ int view::TerminalGameManager::Play() {
 	return 0;
 }
 
-void view::TerminalGameManager::OnLoad() {
+void view::SDLGameManager::OnLoad() {
+	engine::Renderer* renderer = engine::Renderer::GetInstance();
+
+	if (!renderer->Init("PoopPop", 640, 480)) {
+		gameOver = true;
+		return;
+	}
+	renderer->SetBackground(0, 0, 0);
+
 	gridController = new controller::GridController(16, 8);
-	gridView = new view::GridView(gridController);
+	gridView = new view::SDLGridView(gridController);
 }
 
-void view::TerminalGameManager::OnEnd() {
+void view::SDLGameManager::OnEnd() {
 	gameOver = true;
+
+	engine::Renderer* renderer = engine::Renderer::GetInstance();
+	renderer->Close();
 }

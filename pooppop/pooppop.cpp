@@ -2,15 +2,16 @@
 //
 
 #include <iostream>
-#include "TerminalView/TerminalGameManager.h"
+#include <SDL.h>
+#include "SDLView/SDLGameManager.h"
 
-namespace view = ::pooppop::terminalview;
+namespace view = ::pooppop::sdlview;
 
 int main(int argc, char* argv[])
 {
     srand(time(NULL));
 
-    view::TerminalGameManager* gameManager = view::TerminalGameManager::GetInstance();
+    game::IGameManager* gameManager = new view::SDLGameManager();
     return gameManager->Play();
 }
 
